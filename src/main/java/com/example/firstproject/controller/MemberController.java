@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class MemberController {
     @Autowired
-    MemberRepository mem;
+    private MemberRepository mem;
 
     @GetMapping("/signup")
     public String newMemberForm() {
@@ -28,8 +28,8 @@ public class MemberController {
 
         mem.save(member);
 
-
         System.out.println(member);
         return "";
     }
+
 }

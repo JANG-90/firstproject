@@ -3,11 +3,15 @@ package com.example.firstproject.controller;
 import com.example.firstproject.dto.ArticleForm;
 import com.example.firstproject.entity.Article;
 import com.example.firstproject.repository.ArticleRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+@Slf4j
 @Controller
 
 public class ArticleController {
@@ -16,22 +20,27 @@ public class ArticleController {
 
     @GetMapping("/articles/new")
     public String newArticleForm() {
+
         return "articles/new";
     }
 
     @PostMapping("/articles/create")
     public String createArticle(ArticleForm form) {
-        System.out.println(form.toString());
-
-        Article article = new Article();
-        article.setTitle(form.getTitle());
-        article.setContent(form.getContent());
-
+        log.info(form.toString());
+        Article article = form.toEntity();
         repo.save(article);
-
-
-        System.out.println(article);
+        log.info(repo.findById(2L).toString());
+        log.info(article.toString());
         return "";
     }
 
+    @GetMapping("/articles/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        log.info("id = " + id);
+        Article articleEntity = repo.findById(id).orElse(null);
+        model.addAttribute("article", articleEntity);
+
+        return "articles/show";
+
+    }
 }

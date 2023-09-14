@@ -1,23 +1,19 @@
 package com.example.firstproject.dto;
 
+
+import com.example.firstproject.entity.Article;
+import lombok.AllArgsConstructor;
+import lombok.ToString;
+
+@AllArgsConstructor  //생성자 자동생성
+@ToString
 public class ArticleForm {
 
     private String title;
     private String content;
 
-    public String getTitle() {
-        return title;
+    public Article toEntity() {
+        return new Article(null, title, content);
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
 }
