@@ -11,10 +11,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Slf4j
 @Controller
 
 public class ArticleController {
+
+    @GetMapping("/articles")
+
+    public String index(Model model){
+        ArrayList<Article> articleEntityList = repo.findAll();
+        model.addAttribute("articleList",articleEntityList);
+        return "/articles/index";
+    }
+
     @Autowired
     private ArticleRepository repo;
 
@@ -28,10 +40,13 @@ public class ArticleController {
     public String createArticle(ArticleForm form) {
         log.info(form.toString());
         Article article = form.toEntity();
-        repo.save(article);
+
+        Article saved = repo.save(article);
+
         log.info(repo.findById(2L).toString());
-        log.info(article.toString());
-        return "";
+
+        return "redirect:/articles/" +  saved.getId();
+
     }
 
     @GetMapping("/articles/{id}")
@@ -42,5 +57,13 @@ public class ArticleController {
 
         return "articles/show";
 
+    }
+
+
+    @GetMapping("/articles/{id}/edit")
+    public String edit(@PathVariable Long id, Model model) {
+        Article article = repo.findById(id).orElse(null);
+        model.addAttribute("article", article);
+        return "articles/edit";
     }
 }
