@@ -21,9 +21,9 @@ public class ArticleController {
 
     @GetMapping("/articles")
 
-    public String index(Model model){
+    public String index(Model model) {
         ArrayList<Article> articleEntityList = repo.findAll();
-        model.addAttribute("articleList",articleEntityList);
+        model.addAttribute("articleList", articleEntityList);
         return "/articles/index";
     }
 
@@ -45,7 +45,7 @@ public class ArticleController {
 
         log.info(repo.findById(2L).toString());
 
-        return "redirect:/articles/" +  saved.getId();
+        return "redirect:/articles/" + saved.getId();
 
     }
 
@@ -66,4 +66,17 @@ public class ArticleController {
         model.addAttribute("article", article);
         return "articles/edit";
     }
+
+    @PostMapping("/articles/update")
+    public String update(ArticleForm form) {
+        log.info(form.toString());
+        Article articleEntity = form.toEntity();
+        log.info(articleEntity.toString());
+        Article target = repo.findById(articleEntity.getId()).orElse(null);
+        if (target != null) {
+            repo.save(articleEntity);
+        }
+        return "redirect:/articles/"+articleEntity.getId();
+    }
+
 }
