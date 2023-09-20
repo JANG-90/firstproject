@@ -21,7 +21,6 @@ import java.util.List;
 public class ArticleController {
 
     @GetMapping("/articles")
-
     public String index(Model model) {
         ArrayList<Article> articleEntityList = repo.findAll();
         model.addAttribute("articleList", articleEntityList);
@@ -41,13 +40,9 @@ public class ArticleController {
     public String createArticle(ArticleForm form) {
         log.info(form.toString());
         Article article = form.toEntity();
-
         Article saved = repo.save(article);
-
         log.info(repo.findById(2L).toString());
-
         return "redirect:/articles/" + saved.getId();
-
     }
 
     @GetMapping("/articles/{id}")
@@ -77,10 +72,10 @@ public class ArticleController {
         if (target != null) {
             repo.save(articleEntity);
         }
-        return "redirect:/articles/"+articleEntity.getId();
+        return "redirect:/articles/"+articleEntity.getId();//redirect 다시 한번 유알엘 다른컨트롤부르기위해
     }
 
-    @GetMapping("/articles/{id}/delete")
+    @GetMapping("/articles/{id}/delete")//redirect 다시 한번 유알엘 다른컨트롤부르기위해
     public String delete(@PathVariable Long id, RedirectAttributes rttr){
         log.info("Delete");
         Article target = repo.findById(id).orElse(null);
